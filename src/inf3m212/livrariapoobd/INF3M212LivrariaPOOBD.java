@@ -9,6 +9,7 @@ import controller.CCliente;
 import controller.CEditora;
 import controller.CLivro;
 import controller.CVendaLivro;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -23,6 +24,7 @@ import services.LivroServicos;
 import services.ServicosFactory;
 import services.VendaLivroServicos;
 import util.Validadores;
+import view.Menu;
 
 /**
  *
@@ -46,7 +48,7 @@ public class INF3M212LivrariaPOOBD {
             leiaNum.nextLine();
         }
         return num;
-    }
+    }//fim leiaNumInt
 
     public static float leiaNumFloat() {
         Scanner leiaNum = new Scanner(System.in);
@@ -58,7 +60,7 @@ public class INF3M212LivrariaPOOBD {
             leiaNum.nextLine();
         }
         return num;
-    }
+    }//fim leiaNumFloat
 
     public static void menuP() {
         System.out.println("..: Livraria :..");
@@ -68,7 +70,7 @@ public class INF3M212LivrariaPOOBD {
         System.out.println("4 - Venda Livro");
         System.out.println("0 - Sair");
         System.out.print("Escolha uma opção: ");
-    }
+    }//fim menuP
 
     public static void subMenu(int op) {
         String tpCad = null;
@@ -90,7 +92,7 @@ public class INF3M212LivrariaPOOBD {
         System.out.println("4 - Deletar " + tpCad);
         System.out.println("0 - Voltar ");
         System.out.print("Escolha uma opção: ");
-    }
+    }//fim subMenu
 
     public static void cadastrarCliente() {
         int idCliente;
@@ -326,8 +328,11 @@ public class INF3M212LivrariaPOOBD {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException{
         // TODO code application logic here
+        Menu jfMenu = new Menu();
+        jfMenu.setVisible(true);
+        /*
         cadCliente.mockClientes();
         cadEditora.mockEditoras();
         cadLivro.mockLivros();
@@ -409,7 +414,8 @@ public class INF3M212LivrariaPOOBD {
                     break;
             }
         } while (opM != 0);
-    }
+        */
+    }//fim main
 
     private static void editarCliente() {
         ClienteServicos clienteS = ServicosFactory.getClienteServicos();
@@ -461,7 +467,7 @@ public class INF3M212LivrariaPOOBD {
         } else {
             System.out.println("CPF inválido!");
         }
-    }
+    }//fim editarCliente
 
     private static void cadastrarLivro() {
         LivroServicos livrosS = ServicosFactory.getLivroServicos();
