@@ -27,7 +27,7 @@ public class jfCliente extends javax.swing.JFrame {
         jbDeletar.setVisible(false);
         this.setLocationRelativeTo(null);
     }
-    
+
     public boolean validaInputs() {
         if (jtfNome.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Preencher Nome!");
@@ -41,7 +41,7 @@ public class jfCliente extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Preencher Endereço!");
             jtfEndereco.requestFocus();
             return false;
-        } else if (jftfTelefone.getValue() == null) {
+        } else if (jftfTelefone.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Preencher Telefone!");
             jftfTelefone.requestFocus();
             return false;
@@ -249,10 +249,7 @@ public class jfCliente extends javax.swing.JFrame {
                                 .addComponent(jbFechar))))
                     .addComponent(jSeparator2))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -342,16 +339,17 @@ public class jfCliente extends javax.swing.JFrame {
     private void jbLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimparActionPerformed
         if (jbLimpar.getText().equals("Limpar")) {
             limparCampos();
-            
+
         } else {
             limparCampos();
             jbLimpar.setText("Limpar");
             jbSalvar.setText("Salvar");
             jbEditar.setEnabled(false);
             jtfCPF.setEnabled(true);
+            jbDeletar.setVisible(true);
         }
     }
-    
+
     public void limparCampos() {
         jtfCPF.setText("");
         jtfNome.setText("");
@@ -368,15 +366,21 @@ public class jfCliente extends javax.swing.JFrame {
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
         if (validaInputs()) {
             int idCliente = 0;
-            String nomeCliente = jtfNome.getText();
+            String nomeCliente = jtfNome.getText().toUpperCase();
             String cpf = jtfCPF.getText();
             String cnpj = null;
-            String endereco = jtfEndereco.getText();
+            String endereco = jtfEndereco.getText().toUpperCase();
             String telefone = jftfTelefone.getText();
             ClienteServicos clienteS = ServicosFactory.getClienteServicos();
-            
+
             Cliente c = new Cliente(idCliente, nomeCliente, cpf, cnpj, endereco, telefone);
-            clienteS.cadCliente(c);
+            if (jbSalvar.getText().equals("Salvar")) {
+                clienteS.cadCliente(c);
+            } else {
+                clienteS.atualizarCliente(c);
+                jbLimpar.doClick();
+            }
+
             limparCampos();
             addRowToTable();
         }
@@ -387,23 +391,38 @@ public class jfCliente extends javax.swing.JFrame {
         jtfCPF.setEnabled(false);
         jbLimpar.setText("Cancelar");
         jbDeletar.setVisible(false);
+
+        int linha;
+        linha = jtClientes.getSelectedRow();
+        String cpf = (String) jtClientes.getValueAt(linha, 0);
+        String nome = (String) jtClientes.getValueAt(linha, 1);
+        String telefone = (String) jtClientes.getValueAt(linha, 2);
+        String endereco = (String) jtClientes.getValueAt(linha, 3);
+
+        jtfCPF.setText(cpf);
+        jtfNome.setText(nome);
+        jtfEndereco.setText(endereco);
+        jftfTelefone.setText(telefone);
+        jtfNome.requestFocus();
+
+
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDeletarActionPerformed
         int linha;
         String cpf;
         linha = jtClientes.getSelectedRow();
-        
+
         cpf = (String) jtClientes.getValueAt(linha, 0);
         ClienteServicos clienteS = ServicosFactory.getClienteServicos();
-        Object [] resp = {"Sim","Não"};
+        Object[] resp = {"Sim", "Não"};
         int resposta = JOptionPane.showOptionDialog(this, "Deseja realmente deletar esse CPF?", "Deletar",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, resp, resp[0]);
         if (resposta == 0) {
             clienteS.deletarCliente(cpf);
             addRowToTable();
             JOptionPane.showMessageDialog(this, "Cliente deletado com sucesso!");
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "Ok, entendo sua decisão!");
         }
         jbDeletar.setVisible(false);

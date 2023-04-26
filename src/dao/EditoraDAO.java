@@ -100,7 +100,7 @@ public class EditoraDAO {
 
         try {
             Connection con = Conexao.getConexao();
-            String sql = "delete from editoras where = ?";
+            String sql = "delete from editoras where cnpj = ?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, cnpj);
             pst.executeUpdate();

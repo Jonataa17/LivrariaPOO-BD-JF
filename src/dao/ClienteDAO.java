@@ -99,7 +99,7 @@ public class ClienteDAO {
 
         try {
             Connection con = Conexao.getConexao();
-            String sql = "delete from clientes where = ?";
+            String sql = "delete from clientes where cpf = ?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, cpf);
             pst.executeUpdate();

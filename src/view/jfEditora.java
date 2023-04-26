@@ -41,7 +41,7 @@ public class jfEditora extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Preencher Endereço!");
             jtfEndereco.requestFocus();
             return false;
-        } else if (jftfTelefone.getValue() == null) {
+        } else if (jftfTelefone.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Preencher Telefone!");
             jftfTelefone.requestFocus();
             return false;
@@ -276,9 +276,6 @@ public class jfEditora extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -290,6 +287,7 @@ public class jfEditora extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addComponent(jSeparator2)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -365,6 +363,7 @@ public class jfEditora extends javax.swing.JFrame {
             jbSalvar.setText("Salvar");
             jbEditar.setEnabled(false);
             jtfCNPJ.setEnabled(true);
+            jbDeletar.setVisible(true);
         }
     }
 
@@ -417,15 +416,21 @@ public class jfEditora extends javax.swing.JFrame {
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
         if (validaInputs()) {
             int idEditora = 0;
-            String nmEditora = jtfNomeEditora.getText();
+            String nmEditora = jtfNomeEditora.getText().toUpperCase();
             String cnpj = jtfCNPJ.getText();
-            String endereco = jtfEndereco.getText();
+            String endereco = jtfEndereco.getText().toUpperCase();
             String telefone = jftfTelefone.getText();
-            String gerente = jtfGerente.getText();
+            String gerente = jtfGerente.getText().toUpperCase();
             EditoraServicos editoraS = ServicosFactory.getEditoraServicos();
 
             Editora e = new Editora(idEditora, nmEditora, cnpj, endereco, telefone, gerente);
-            editoraS.cadEditora(e);
+            if (jbSalvar.getText().equals("Salvar")) {
+                editoraS.cadEditora(e);
+            } else {
+                editoraS.atualizarEditora(e);
+                jbLimpar.doClick();
+            }
+
             limparCampos();
             addRowToTable();
         }
@@ -436,6 +441,22 @@ public class jfEditora extends javax.swing.JFrame {
         jtfCNPJ.setEnabled(false);
         jbLimpar.setText("Cancelar");
         jbDeletar.setVisible(false);
+
+        int linha;
+        linha = jtEditoras.getSelectedRow();
+        String cnpj = (String) jtEditoras.getValueAt(linha, 0);
+        String nomeEditora = (String) jtEditoras.getValueAt(linha, 1);
+        String telefone = (String) jtEditoras.getValueAt(linha, 2);
+        String endereco = (String) jtEditoras.getValueAt(linha, 3);
+        String gerente = (String) jtEditoras.getValueAt(linha, 4);
+
+        jtfCNPJ.setText(cnpj);
+        jtfNomeEditora.setText(nomeEditora);
+        jtfEndereco.setText(endereco);
+        jftfTelefone.setText(telefone);
+        jtfGerente.setText(gerente);
+        jtfNomeEditora.requestFocus();
+
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDeletarActionPerformed
