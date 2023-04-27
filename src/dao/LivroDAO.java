@@ -132,11 +132,14 @@ public class LivroDAO {
             //cria espaço de trabalho SQL, é a area no Java onde vamos executar os Scripts SQL
             String sql;
 
-            sql = "update livros set estoque = ?, preco = ? where isbn = ?";
+            sql = "update livros set estoque = ?, preco = ?, autor = ?, assunto = ?, titulo = ? where isbn = ?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setInt(1, liVO.getEstoque());
             pst.setFloat(2, liVO.getPreco());
-            pst.setString(3, liVO.getIsbn());
+            pst.setString(3, liVO.getAutor());
+            pst.setString(4, liVO.getAssunto());
+            pst.setString(5, liVO.getTitulo());
+            pst.setString(6, liVO.getIsbn());
             pst.executeUpdate();
 
         } catch (SQLException ex) {

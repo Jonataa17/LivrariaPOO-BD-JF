@@ -181,7 +181,8 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jmEditoraActionPerformed
 
     private void jmLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmLivroActionPerformed
-        JOptionPane.showMessageDialog(this, "-- Cadastrar Livro --");
+        jfLivro janelaLivro = new jfLivro();
+        janelaLivro.setVisible(true);
     }//GEN-LAST:event_jmLivroActionPerformed
 
     /**
